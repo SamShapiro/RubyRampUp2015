@@ -1,15 +1,12 @@
 def encrypt phrase, cipher, dir
-	arphrase = phrase.upcase.split(//)
+	arphrase = phrase.gsub(/\W+/, '').upcase.split(//)
 	arphrase.delete(" ")
 	arcrypted = []
 	arcipher = []
-	letters = ("A".."Z").to_a
-	for a in ("A".."Z").to_a
-		letters << a
-	end
+	letters = ("A".."Z").to_a.concat(("A".."Z").to_a)
 
 	until arcipher.length >= arphrase.length
-		for c in cipher.upcase.split(//)
+		for c in cipher.gsub(/\W+/, '').upcase.split(//)
 			arcipher << c
 			arcipher.delete(" ")
 		end
