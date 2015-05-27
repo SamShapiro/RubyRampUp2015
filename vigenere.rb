@@ -1,4 +1,4 @@
-def encrypt phrase, cipher
+def encrypt phrase, cipher, dir
 	arphrase = phrase.upcase.split(//)
 	arphrase.delete(" ")
 	arcrypted = []
@@ -19,14 +19,32 @@ def encrypt phrase, cipher
 		arcipher.delete_at(-1)
 	end
 	for i in 0..arphrase.length-1
-		numlet = letters.index(arphrase[i]) + letters.index(arcipher[i])
+		numlet = letters.index(arphrase[i]).send(dir, letters.index(arcipher[i]))
 		arcrypted << letters[numlet]
 	end
 	puts arcrypted.join('')
 end
 
-puts "Enter your phrase to be encrypted:"
-ph = gets.chomp
-puts "Enter the encryption key:"
-ci = gets.chomp
-encrypt ph, ci
+
+success = 0
+until success == 1
+	puts "This program uses a Vigenere Cipher. Would you like to ENCRYPT or DECRYPT a phrase?"
+	cryption = gets.chomp
+	if cryption.upcase == "ENCRYPT"
+		puts "Enter your phrase to be encrypted:"
+		ph = gets.chomp
+		puts "Enter the encryption key:"
+		ci = gets.chomp
+		encrypt ph, ci, "+"
+		success = 1
+	elsif cryption.upcase == "DECRYPT"
+		puts "Enter your encoded phrase to be decrypted:"
+		ph = gets.chomp
+		puts "Enter the encryption key:"
+		ci = gets.chomp
+		encrypt ph, ci, "-"
+		success = 1
+	else
+		puts "You must enter a valid choice: ENCRYPT or DECRYPT. Please try again."
+	end
+end
