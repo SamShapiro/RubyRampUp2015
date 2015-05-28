@@ -30,18 +30,17 @@ until success == 1
 	if cryption.upcase == "ENCRYPT"
 		puts "Enter your phrase to be encrypted:"
 		ph = gets.chomp
-		puts "Enter the encryption key:"
-		ci = gets.chomp
-		encrypt ph, ci, "+"
+		dir = "+"
 		success = 1
 	elsif cryption.upcase == "DECRYPT"
 		puts "Enter your encoded phrase to be decrypted:"
 		ph = gets.chomp
-		puts "Enter the encryption key:"
-		ci = gets.chomp
-		encrypt ph, ci, "-"
+		dir = "-"
 		success = 1
 	else
 		puts "You must enter a valid choice: ENCRYPT or DECRYPT. Please try again."
 	end
 end
+puts "Enter the encryption key:"
+ci = gets.chomp
+encrypt ph, ci, dir
