@@ -35,6 +35,21 @@ class Ship
     @playerImage.draw_rot(@x, @y, 1, @angle)
   end
 
+  def hitAsteroid(asts)
+    for a in asts
+      if Gosu::distance(@x, @y, a.x+a.astImage.width/2, a.y+a.astImage.height/2) < 25 && a.invinceCounter > 15
+        if a.small == false
+          asts << Obstacle.new(x=a.x, y=a.y,small=true, angle=rand(360))
+          asts << Obstacle.new(x=a.x, y=a.y,small=true, angle=rand(360))
+          asts << Obstacle.new(x=a.x, y=a.y,small=true, angle=rand(360))
+          asts.delete(a)
+        else
+          asts.delete(a)
+        end
+      end
+    end
+  end
+  
   def update
     if Gosu::button_down? Gosu::KbLeft
       self.turn_left

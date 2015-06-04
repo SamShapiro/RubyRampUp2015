@@ -12,18 +12,14 @@ class Hand
 		@hand = []
 	end
 	attr_reader :hand
-	def draw deck, numdraw=1
-		for i in numdraw
-			@hand << deck.pop
-		end
-	end
+	
 end
 
 class Deck
 	def initialize
 		@deck = []
 		@suits = ["Spades", "Hearts", "Diamonds", "Clubs"]
-		@nums = ["Ace"].concat((2..10).to_a).concat(["Jack", "Queen", "King", "Ace"])
+		@nums = ["Ace"] + (2..10).to_a + ["Jack", "Queen", "King", "Ace"]
 		for s in @suits
 			for c in @nums
 				@deck << Card.new(c, s)
@@ -55,5 +51,11 @@ class Player
 		@name = name
 		@hand = Hand.new
 	end
+	def draw deck, numdraw=1
+		for i in (0...numdraw)
+			@hand.hand << deck.pop
+		end
+	end
 	attr_reader :name
+	attr_reader :hand
 end
