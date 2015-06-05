@@ -1,7 +1,10 @@
 class Ship
   def initialize
     @playerImage = Gosu::Image.new("media/spaceship.png")
+    @lsound = Gosu::Sample.new("media/lasersound.wav")
     @x = @y = @velx = @vely = @angle = 0.0
+    @lasers = []
+    @laserCooldown = 0
   end
 
   def warp x,y
@@ -33,24 +36,26 @@ class Ship
 
   def draw
     @playerImage.draw_rot(@x, @y, 1, @angle)
-  end
-
-  def hitAsteroid(asts)
-    for a in asts
-      if Gosu::distance(@x, @y, a.x+a.astImage.width/2, a.y+a.astImage.height/2) < 25 && a.invinceCounter > 15
-        if a.small == false
-          asts << Obstacle.new(x=a.x, y=a.y,small=true, angle=rand(360))
-          asts << Obstacle.new(x=a.x, y=a.y,small=true, angle=rand(360))
-          asts << Obstacle.new(x=a.x, y=a.y,small=true, angle=rand(360))
-          asts.delete(a)
-        else
-          asts.delete(a)
-        end
-      end
+    @lasers.each do |laser|
+      laser.draw
     end
   end
-  
-  def update
+
+  def shootLaser
+    @lasers << Laser.new(@x, @y, @angle)
+    @laserCooldown = 30
+    @lsound.play
+  end
+
+  def update (asts)
+    if Gosu::button_down? Gosu::KbSpace 
+      if @laserCooldown < 1
+        self.shootLaser
+      end
+    end
+    if @laserCooldown > 0
+      @laserCooldown -= 1
+    end
     if Gosu::button_down? Gosu::KbLeft
       self.turn_left
     end
@@ -61,5 +66,11 @@ class Ship
       self.accelerate
     end
     self.move
+    @lasers.each do |laser|
+      laser.update (asts)
+      if laser.hashit == true
+        @lasers.delete(laser)
+      end
+    end
   end
 end
